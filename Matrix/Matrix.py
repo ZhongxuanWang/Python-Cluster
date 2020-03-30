@@ -3,6 +3,7 @@ Matrix class written by Daniel Wang encapsulating most of the aspects of matrice
 this provides more functionalities and convenient access to code.
 """
 
+import copy
 import numpy as np
 from numpy import array as arr
 
@@ -13,7 +14,7 @@ class Matrix(object):
     def __init__(self, *mat):
         if mat:
             assert len(mat) > 0 and len(mat[0]) > 0
-            self.mat = arr(mat)
+            self.mat = mat
         else:
             self.mat = self.identity(3)
         self.nrows = len(mat)
@@ -26,46 +27,64 @@ class Matrix(object):
         return "Matrix" + str(self.mat[0])
 
     def __mul__(self, other):
-        return self.internal_dot(other)
+        return self.__internal_dot(other)
 
     def __add__(self, other):
-        return self.internal_add(other)
+        return self.__internal_add(other)
+
+    # Make the object from this class subscriptable
+    def __getitem__(self, item):
+        return self.mat[item]
+
+    def __len__(self):
+        return len(self.mat)
 
     def dot(self, nm):
-        mat = self.internal_dot(nm)
+        mat = self.__internal_dot(nm)
 
     def add(self, nm):
-        mat = self.internal_add(nm)
+        mat = self.__internal_add(nm)
 
     """
-    Using matplotlib to plot graph
+    Using matplotlib to plot matrix
     """
+
     def matplot(self):
         pass
 
     """
     Using seaborn to plot matrix
     """
+
     def seaplot(self):
         pass
 
-
-
-    def internal_dot(self, nm):
+    # This means a private method
+    def __internal_dot(self, nm):
         if isinstance(nm, (int, float, bool)):
             return self.mat[0] * nm
         else:
-            # self.mat =
-            pass
+            assert len(self.mat[0]) == len(nm)
+            matcher = self.mat[0]
+            nrow = len(self.mat)
+            ncol = len(nm[0])
+            new_mat = self.zero(nrow, ncol, frame=True)
+            for row in range(nrow):
+                for col in range(ncol):
+                    sum = 0
+                    for row2 in range(nrow):
+                        for match in range(matcher):
+                            sum += self.mat[row2][match] * nm[row2][match]
 
-    def internal_add(self, nm):
+                    new_mat[row][col] = sum
+            return new_mat
+
+    def __internal_add(self, nm):
         if isinstance(nm, (int, float, bool)):
-            return self.mat[0] + nm # TODO what happened???
+            return self.mat[0] + nm  # TODO what happened???
         else:
             # self.mat =
             pass
-
-
 
     @staticmethod
     def identity(*dimension):
@@ -89,10 +108,10 @@ class Matrix(object):
             return a
 
     @staticmethod
-    def zero(frame=False, *dimension):
+    def zero(*dimension, frame=False):
         assert 0 < len(dimension) < 3
         if frame:
             var = None
         else:
             var = 0
-        return arr([[var] for _ in range(dimension[0])] for _ in range(dimension[len(dimension) - 1]))
+        return arr([[var for _ in range(dimension[0])] for _ in range(dimension[len(dimension) - 1])])
