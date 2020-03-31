@@ -1,1 +1,0 @@
-**Class's too boring? want to have your own time learning sth else instead of having to stick with the class schedule? Try this**

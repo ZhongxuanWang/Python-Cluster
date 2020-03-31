@@ -1,0 +1,1 @@
+**If you are afraid of talking in online platform when teacher called you to, this software will help you disconnect the wifi and your internet will look like a mess... So they won't call you up!**
