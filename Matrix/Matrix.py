@@ -1,6 +1,7 @@
 """
 Matrix class written by Daniel Wang encapsulating most of the aspects of matrices. Not like Numpy,
 this provides more functionalities and convenient access to code.
+In 4 words: 闲着无聊
 """
 
 import numpy as np
@@ -73,17 +74,20 @@ class Matrix(object):
             return self.mat * nm
         else:
             assert len(self.mat[0]) == len(nm)
-            matcher = len(self.mat[0])
-            nrow = len(self.mat)
-            ncol = len(nm[0])
-            new_mat = self.zero(ncol, nrow, frame=True)
-            for row in range(nrow):
-                for col in range(ncol):
-                    nsum = 0
-                    for row2 in range(nrow):
-                        for match in range(matcher):
-                            nsum += self.mat[row2][match] * nm[row2][match]
 
+            matcher = len(self.mat[0])
+
+            nrow_of_mat = len(self.mat)
+            ncol_of_mat = len(self.mat[0])
+
+            ncol_of_new_mat = len(nm[0])
+
+            new_mat = self.zero(ncol_of_new_mat, nrow_of_mat, frame=True)
+            for row in range(nrow_of_mat):
+                for col in range(ncol_of_new_mat):
+                    nsum = 0
+                    for match in range(matcher):
+                        nsum += nm[match][col] * self.mat[row][match]
                     new_mat[row][col] = nsum
             return new_mat
 
