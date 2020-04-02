@@ -3,7 +3,6 @@ Matrix class written by Daniel Wang encapsulating most of the aspects of matrice
 this provides more functionalities and convenient access to code.
 """
 
-import copy
 import numpy as np
 from numpy import array as arr
 
@@ -12,19 +11,28 @@ class Matrix(object):
     num_of_matrix = 0
 
     def __init__(self, *mat):
+        # ATTENTION: What you get from mat is a tuple formatted variable! to access it, using [index]
         if mat:
-            assert len(mat) > 0 and len(mat[0]) > 0
-            self.mat = mat
+            self.mat = mat[0]
         else:
             self.mat = self.identity(3)
-        self.nrows = len(mat)
-        self.ncols = len(mat[0])
+        self.nrows = len(mat[0])
+        self.ncols = len(mat[0][0])
 
         Matrix.num_of_matrix += 1
         self.my_num = Matrix.num_of_matrix
 
+    def getmat(self):
+        return self.__mat
+
+    def setmat(self, other):
+        assert len(other) > 0 and len(other[0]) > 0
+        self.__mat = other
+
+    mat = property(getmat, setmat)
+
     def __str__(self):
-        return "Matrix" + str(self.mat[0])
+        return "Matrix" + str(self.mat)
 
     def __mul__(self, other):
         return self.__internal_dot(other)
@@ -62,26 +70,26 @@ class Matrix(object):
     # This means a private method
     def __internal_dot(self, nm):
         if isinstance(nm, (int, float, bool)):
-            return self.mat[0] * nm
+            return self.mat * nm
         else:
             assert len(self.mat[0]) == len(nm)
-            matcher = self.mat[0]
+            matcher = len(self.mat[0])
             nrow = len(self.mat)
             ncol = len(nm[0])
-            new_mat = self.zero(nrow, ncol, frame=True)
+            new_mat = self.zero(ncol, nrow, frame=True)
             for row in range(nrow):
                 for col in range(ncol):
-                    sum = 0
+                    nsum = 0
                     for row2 in range(nrow):
                         for match in range(matcher):
-                            sum += self.mat[row2][match] * nm[row2][match]
+                            nsum += self.mat[row2][match] * nm[row2][match]
 
-                    new_mat[row][col] = sum
+                    new_mat[row][col] = nsum
             return new_mat
 
     def __internal_add(self, nm):
         if isinstance(nm, (int, float, bool)):
-            return self.mat[0] + nm  # TODO what happened???
+            return self.mat + nm
         else:
             # self.mat =
             pass
