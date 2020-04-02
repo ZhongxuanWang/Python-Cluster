@@ -54,6 +54,9 @@ class Matrix(object):
     def add(self, nm):
         mat = self.__internal_add(nm)
 
+    def det(self):
+        return self.__internal_det
+
     """
     Using matplotlib to plot matrix
     """
@@ -95,8 +98,12 @@ class Matrix(object):
         if isinstance(nm, (int, float, bool)):
             return self.mat + nm
         else:
+            assert len(self.mat) == len(nm) and len(self.mat[0]) == len(nm[0])
             # self.mat =
             pass
+
+    def __internal_det(self):
+        pass
 
     @staticmethod
     def identity(*dimension):
