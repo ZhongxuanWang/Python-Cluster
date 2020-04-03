@@ -85,7 +85,7 @@ class Matrix(object):
 
             ncol_of_new_mat = len(nm[0])
 
-            new_mat = self.zero(ncol_of_new_mat, nrow_of_mat, frame=True)
+            new_mat = self.zero(nrow_of_mat, ncol_of_new_mat, frame=True)
             for row in range(nrow_of_mat):
                 for col in range(ncol_of_new_mat):
                     nsum = 0
@@ -108,29 +108,28 @@ class Matrix(object):
     @staticmethod
     def identity(*dimension):
         assert 0 < len(dimension) < 3
-        a = arr([])
-        if len(dimension) == 1:
-            for i in range(dimension[0]):
-                for j in range(dimension[0]):
-                    if i == j:
-                        a[i].append(1)
-                    else:
-                        a[i].append(0)
-            return a
-        elif len(dimension) == 2:
-            for i in range(dimension[0]):
-                for j in range(dimension[1]):
-                    if i == j:
-                        a[i].append(1)
-                    else:
-                        a[i].append(0)
-            return a
+        a = Matrix.zero(*dimension)
+        row, col = Matrix.getrc(*dimension)
+        for i in range(row):
+            for j in range(col):
+                if i == j:
+                    a[i] = 1
+        return a
 
     @staticmethod
     def zero(*dimension, frame=False):
         assert 0 < len(dimension) < 3
+        row, col = Matrix.getrc(*dimension)
         if frame:
             var = None
         else:
             var = 0
-        return arr([[var for _ in range(dimension[0])] for _ in range(dimension[len(dimension) - 1])])
+        return arr([[var for _ in range(col)] for _ in range(row)])
+
+    @staticmethod
+    def getrc(*dimension):
+        if len(dimension) > 1:
+            row, col = dimension
+        else:
+            col = row = dimension[0]
+        return row, col

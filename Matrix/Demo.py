@@ -10,6 +10,9 @@ def main():
     mat1 = Matrix(np.array([[1, 2, -3], [4, 0, -2]]))
     mat2 = Matrix(np.array([[5, -4, 2, 0], [-1, 6, 3, 1], [7, 0, 5, 8]]))
 
+    mat3 = Matrix(np.array([[1, 2, -3], [4, 0, -2], [2, 2, -1]]))
+    mat4 = Matrix(np.array([[5, -4, 2], [-1, 3, 1], [7, 0, 8]]))
+
     print("Printing out the content")
     print(mat1, "\n", mat2)
 
@@ -21,6 +24,10 @@ def main():
 
     print("Dot product - with matrix directly")
     print(mat1 * mat2)
+    print(mat3 * mat4)
+
+    print("Identities")
+    print(Matrix.identity(3))
 
 
 if __name__ == '__main__':
