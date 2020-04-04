@@ -18,9 +18,6 @@ def main():
     print("Printing out the content")
     print(mat1, "\n", mat2)
 
-    print("Zero")
-    print(Matrix.zero(3, 4))
-
     print("Dot product - with real number directly")
     print(mat1 * 5)
 
@@ -28,12 +25,14 @@ def main():
     print(mat1 * mat2)
     print(mat3 * mat4)
 
-    print("Identities")
-    print(Matrix.identity(3))
-
     print("Determinant")
     print(abs(mat3))
 
+    print("Identities")
+    print(Matrix.identity(3))
+
+    print("Zero")
+    print(Matrix.zero(3, 4))
 
 if __name__ == '__main__':
     main()
