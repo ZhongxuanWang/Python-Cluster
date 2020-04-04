@@ -14,7 +14,10 @@ class Matrix(object):
     def __init__(self, *mat):
         # ATTENTION: What you get from mat is a tuple formatted variable! to access it, using [index]
         if mat:
-            self.mat = mat[0]
+            if isinstance(type(mat[0]), type(arr)):
+                self.mat = mat[0]
+            else:
+                self.mat = arr(mat[0])
         else:
             self.mat = self.identity(3)
         self.nrows = len(mat[0])
@@ -41,6 +44,9 @@ class Matrix(object):
     def __add__(self, other):
         return self.__internal_add(other)
 
+    def __abs__(self):
+        return self.det()
+
     # Make the object from this class subscriptable
     def __getitem__(self, item):
         return self.mat[item]
@@ -55,7 +61,9 @@ class Matrix(object):
         mat = self.__internal_add(nm)
 
     def det(self):
-        return self.__internal_det
+        # Make sure it's a squre
+        assert len(self.mat) == len(self.mat[0])
+        return self.__internal_det(list(self.mat))
 
     """
     Using matplotlib to plot matrix
@@ -99,11 +107,34 @@ class Matrix(object):
             return self.mat + nm
         else:
             assert len(self.mat) == len(nm) and len(self.mat[0]) == len(nm[0])
-            # self.mat =
-            pass
+            for row in range(len(nm)):
+                for col in range(len(nm[0])):
+                    nm[row][col] += self.mat[row][col]
+            return nm
 
-    def __internal_det(self):
-        pass
+    """
+    Precondition: 
+    1. Squre matrix
+    
+    Postcondition:
+    mat object is not changed    
+    """
+
+    def __internal_det(self, nm):
+        sum = 0
+        if len(nm) == 2:
+            return nm[0][0] * nm[1][1] - nm[0][1] * nm[1][0]
+        for col in range(len(nm[0])):
+            sum += (-1)**(2 + col) * nm[0][col] * self.__internal_det(np.delete(np.delete(nm, 0, 0), col, 1))
+        return sum
+
+    # def __construct_nm(self, nm, col):
+    #     changed_matrix = Matrix.zero(len(nm) - 1, len(nm[0]) - 1)
+    #     for r in range(1, len(nm)):
+    #         for c in range(0, len(nm[0])):
+    #             if c != col:
+    #                 changed_matrix = nm[r][c]
+    #     return changed_matrix
 
     @staticmethod
     def identity(*dimension):

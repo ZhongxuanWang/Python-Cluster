@@ -33,7 +33,6 @@ def print_sound(indata, outdata, frames, time, status):
     except:
         pass
 
-
 with sd.Stream(callback=print_sound):
     while True:
         pass
