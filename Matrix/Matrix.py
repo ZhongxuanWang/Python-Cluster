@@ -60,9 +60,24 @@ class Matrix(object):
     def add(self, nm):
         mat = self.__internal_add(nm)
 
+    def inv(self):
+        row = len(self.mat)
+        col = len(self.mat[0])
+        # Make sure it's a square
+        assert row == col
+        return self.__internal_inv()
+
     def det(self):
-        # Make sure it's a squre
-        assert len(self.mat) == len(self.mat[0])
+        row = len(self.mat)
+        col = len(self.mat[0])
+        # Make sure it's a square
+        assert row == col
+        # Edge cases
+        if 997 < row < 1000000:
+            import sys
+            sys.setrecursionlimit(row + 2)
+        elif row > 1000000:
+            raise Exception("Row/Col number exceeded")
         return self.__internal_det(list(self.mat))
 
     """
@@ -112,6 +127,9 @@ class Matrix(object):
                     nm[row][col] += self.mat[row][col]
             return nm
 
+    def __internal_inv(self):
+        pass
+
     """
     Precondition: 
     1. Squre matrix
@@ -125,7 +143,7 @@ class Matrix(object):
         if len(nm) == 2:
             return nm[0][0] * nm[1][1] - nm[0][1] * nm[1][0]
         for col in range(len(nm[0])):
-            sum += (-1)**(2 + col) * nm[0][col] * self.__internal_det(np.delete(np.delete(nm, 0, 0), col, 1))
+            sum += (-1) ** (2 + col) * nm[0][col] * self.__internal_det(np.delete(np.delete(nm, 0, 0), col, 1))
         return sum
 
     # def __construct_nm(self, nm, col):
