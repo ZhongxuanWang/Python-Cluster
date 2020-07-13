@@ -54,6 +54,12 @@ class Matrix:
     def __len__(self):
         return self.nrows
 
+    def __pow__(self, power, modulo=None):
+        m = self.mat
+        for a in range(power):
+            m = self.__internal_dot(m)
+        return m
+
     def dot(self, nm, inplace=False):
         result = self.__internal_dot(nm)
         if inplace:
@@ -67,6 +73,7 @@ class Matrix:
         return result
 
     def inv(self):
+        assert self.det() is not 0
         row = len(self.mat)
         col = len(self.mat[0])
         # Make sure it's a square
