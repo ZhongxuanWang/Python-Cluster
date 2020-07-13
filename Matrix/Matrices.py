@@ -1,6 +1,6 @@
 """
 Matrix class written by Daniel Wang encapsulating most of the aspects of matrices. Not like Numpy,
-this provides more functionalities and convenient access to code.
+this provides more functions and more user-friendly.
 In 4 words: 闲着无聊
 """
 
@@ -8,32 +8,32 @@ import numpy as np
 from numpy import array as arr
 
 
-class Matrix(object):
+class Matrix():
     num_of_matrix = 0
 
-    def __init__(self, *mat):
-        # ATTENTION: What you get from mat is a tuple formatted variable! to access it, using [index]
+    def __init__(self, shape, *mat):
+        mat = mat[0]
         if mat:
-            if isinstance(type(mat[0]), type(arr)):
-                self.mat = mat[0]
+            if isinstance(type(mat), type(arr)):
+                self.mat = mat
             else:
-                self.mat = arr(mat[0])
+                self.mat = arr(mat)
         else:
             self.mat = self.identity(3)
-        self.nrows = len(mat[0])
-        self.ncols = len(mat[0][0])
+        self.nrows = len(mat)
+        self.ncols = len(mat[0])
 
         Matrix.num_of_matrix += 1
         self.my_num = Matrix.num_of_matrix
 
-    def getmat(self):
-        return self.__mat
+    def get_mat(self):
+        return self.mat
 
-    def setmat(self, other):
+    def set_mat(self, other):
         assert len(other) > 0 and len(other[0]) > 0
-        self.__mat = other
+        self.mat = other
 
-    mat = property(getmat, setmat)
+    mat = property(get_mat, set_mat)
 
     def __str__(self):
         return "Matrix" + str(self.mat)
@@ -54,11 +54,17 @@ class Matrix(object):
     def __len__(self):
         return len(self.mat)
 
-    def dot(self, nm):
-        mat = self.__internal_dot(nm)
+    def dot(self, nm, inplace=False):
+        result = self.__internal_dot(nm)
+        if inplace:
+            self.mat = result
+        return result
 
-    def add(self, nm):
-        mat = self.__internal_add(nm)
+    def add(self, nm, inplace=False):
+        result = self.__internal_add(nm)
+        if inplace:
+            self.mat = result
+        return result
 
     def inv(self):
         row = len(self.mat)
@@ -87,13 +93,6 @@ class Matrix(object):
     def matplot(self):
         pass
 
-    """
-    Using seaborn to plot matrix
-    """
-
-    def seaplot(self):
-        pass
-
     # This means a private method
     def __internal_dot(self, nm):
         if isinstance(nm, (int, float, bool)):
@@ -104,8 +103,6 @@ class Matrix(object):
             matcher = len(self.mat[0])
 
             nrow_of_mat = len(self.mat)
-            ncol_of_mat = len(self.mat[0])
-
             ncol_of_new_mat = len(nm[0])
 
             new_mat = self.zero(nrow_of_mat, ncol_of_new_mat, frame=True)
