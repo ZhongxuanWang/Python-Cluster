@@ -8,18 +8,18 @@ import numpy as np
 from numpy import array as arr
 
 
-class Matrix():
+class Matrix:
     num_of_matrix = 0
 
-    def __init__(self, shape, *mat):
-        mat = mat[0]
-        if mat:
+    def __init__(self, mat, shape=None):
+        if mat is not None:
             if isinstance(type(mat), type(arr)):
                 self.mat = mat
             else:
                 self.mat = arr(mat)
         else:
-            self.mat = self.identity(3)
+            assert shape is not None
+            self.mat = self.identity(shape)
         self.nrows = len(mat)
         self.ncols = len(mat[0])
 
@@ -27,11 +27,11 @@ class Matrix():
         self.my_num = Matrix.num_of_matrix
 
     def get_mat(self):
-        return self.mat
+        return self.__mat
 
     def set_mat(self, other):
         assert len(other) > 0 and len(other[0]) > 0
-        self.mat = other
+        self.__mat = other
 
     mat = property(get_mat, set_mat)
 
@@ -52,7 +52,7 @@ class Matrix():
         return self.mat[item]
 
     def __len__(self):
-        return len(self.mat)
+        return self.nrows
 
     def dot(self, nm, inplace=False):
         result = self.__internal_dot(nm)
@@ -102,10 +102,10 @@ class Matrix():
 
             matcher = len(self.mat[0])
 
-            nrow_of_mat = len(self.mat)
-            ncol_of_new_mat = len(nm[0])
+            nrow_of_mat, ncol_of_new_mat = len(self.mat), len(nm[0])
 
             new_mat = self.zero(nrow_of_mat, ncol_of_new_mat, frame=True)
+
             for row in range(nrow_of_mat):
                 for col in range(ncol_of_new_mat):
                     nsum = 0
@@ -136,12 +136,12 @@ class Matrix():
     """
 
     def __internal_det(self, nm):
-        sum = 0
+        number_sum = 0
         if len(nm) == 2:
             return nm[0][0] * nm[1][1] - nm[0][1] * nm[1][0]
         for col in range(len(nm[0])):
-            sum += (-1) ** (2 + col) * nm[0][col] * self.__internal_det(np.delete(np.delete(nm, 0, 0), col, 1))
-        return sum
+            number_sum += (-1) ** (2 + col) * nm[0][col] * self.__internal_det(np.delete(np.delete(nm, 0, 0), col, 1))
+        return number_sum
 
     # def __construct_nm(self, nm, col):
     #     changed_matrix = Matrix.zero(len(nm) - 1, len(nm[0]) - 1)
@@ -159,7 +159,7 @@ class Matrix():
         for i in range(row):
             for j in range(col):
                 if i == j:
-                    a[i] = 1
+                    a[i][j] = 1
         return a
 
     @staticmethod
