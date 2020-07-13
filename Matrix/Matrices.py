@@ -86,6 +86,11 @@ class Matrix:
             raise Exception("Row/Col number exceeded")
         return self.__internal_det(list(self.mat))
 
+    '''
+    Transpose = Interhange row and column
+    '''
+    def transpose(self):
+        return self.__internal_transpose
     """
     Using matplotlib to plot matrix
     """
@@ -104,7 +109,7 @@ class Matrix:
 
             nrow_of_mat, ncol_of_new_mat = len(self.mat), len(nm[0])
 
-            new_mat = self.zero(nrow_of_mat, ncol_of_new_mat, frame=True)
+            new_mat = self.zeros(nrow_of_mat, ncol_of_new_mat, frame=True)
 
             for row in range(nrow_of_mat):
                 for col in range(ncol_of_new_mat):
@@ -151,10 +156,16 @@ class Matrix:
     #                 changed_matrix = nm[r][c]
     #     return changed_matrix
 
+    def __internal_transpose(self):
+        new_mat = Matrix.zeros(len(self.mat[0]), len(self.mat))
+        for a in range(len(self.mat[0])):
+            new_mat[a] = self.mat[:, 0]
+        return new_mat
+
     @staticmethod
     def identity(*dimension):
         assert 0 < len(dimension) < 3
-        a = Matrix.zero(*dimension)
+        a = Matrix.zeros(*dimension)
         row, col = Matrix.getrc(*dimension)
         for i in range(row):
             for j in range(col):
@@ -187,5 +198,5 @@ class Matrix:
         if len(dimension) > 1:
             row, col = dimension
         else:
-            col = row = dimension[0]
+            col, row = dimension[0]
         return row, col
