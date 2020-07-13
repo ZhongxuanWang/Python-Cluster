@@ -32,7 +32,7 @@ def main():
     print(Matrix.identity(3))
 
     print("Zero")
-    print(Matrix.zero(3, 4))
+    print(Matrix.zeros(3, 4))
 
 
 if __name__ == '__main__':

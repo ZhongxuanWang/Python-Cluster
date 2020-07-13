@@ -163,13 +163,23 @@ class Matrix:
         return a
 
     @staticmethod
-    def zero(*dimension, frame=False):
+    def zeros(*dimension, frame=False):
         assert 0 < len(dimension) < 3
         row, col = Matrix.getrc(*dimension)
         if frame:
             var = None
         else:
             var = 0
+        return arr([[var for _ in range(col)] for _ in range(row)])
+
+    @staticmethod
+    def ones(*dimension, frame=False):
+        assert 0 < len(dimension) < 3
+        row, col = Matrix.getrc(*dimension)
+        if frame:
+            var = None
+        else:
+            var = 1
         return arr([[var for _ in range(col)] for _ in range(row)])
 
     @staticmethod
